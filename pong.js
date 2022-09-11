@@ -230,6 +230,8 @@ window.addEventListener("keydown", (event) => {
       break;
     case "y":
       hotkeys.t.pressed = false;
+      pong2keys.ArrowDown.pressed = false;
+      pong2keys.ArrowUp.pressed = false;
       break;
   }
 });
