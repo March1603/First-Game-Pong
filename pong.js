@@ -20,8 +20,8 @@ class sprite {
     c.fillRect(974, 0, 4, canvas.height);
     c.fillStyle = "white";
     c.fillRect(
-      this.position.x - this.vari.Xoffset,
-      this.position.y - this.vari.Yoffset,
+      this.position.x,
+      this.position.y,
       this.vari.width,
       this.vari.height
     );
@@ -38,9 +38,56 @@ class sprite {
   ballmove() {
     this.draw();
     ball.position.x += ball.velocity.x;
+    ball.position.y += ball.velocity.y;
+    //reset ball position if scored
     if (ball.position.x > 1014) {
       ball.position.x = 512;
       ball.position.y = 288;
+      ball.velocity.x = 5;
+      ball.velocity.y = 0;
+    } else if (ball.position.x < 10) {
+      ball.position.x = 512;
+      ball.position.y = 288;
+      ball.velocity.x = -5;
+      ball.velocity.y = 0;
+    }
+    //map borders
+    if (ball.position.y > canvas.height || ball.position.y < 0) {
+      ball.velocity.y = -ball.velocity.y;
+    }
+    //pong2 collision
+    if (
+      ball.position.x + ball.vari.width > pong2.position.x &&
+      ball.position.y >= pong2.position.y &&
+      ball.position.y <= pong2.position.y + pong2.vari.height / 2
+    ) {
+      ball.velocity.x = -ball.velocity.x;
+      ball.velocity.y = -5;
+    }
+    if (
+      ball.position.x + ball.vari.width > pong2.position.x &&
+      ball.position.y >= pong2.position.y + pong2.vari.height / 2 &&
+      ball.position.y <= pong2.position.y + pong2.vari.height
+    ) {
+      ball.velocity.x = -ball.velocity.x;
+      ball.velocity.y = 5;
+    }
+    //pong1 collision
+    if (
+      ball.position.x < pong1.position.x + pong1.vari.width &&
+      ball.position.y >= pong1.position.y &&
+      ball.position.y <= pong1.position.y + pong1.vari.height / 2
+    ) {
+      ball.velocity.x = -ball.velocity.x;
+      ball.velocity.y = -5;
+    }
+    if (
+      ball.position.x < pong1.position.x + pong1.vari.width &&
+      ball.position.y >= pong1.position.y + pong1.vari.height / 2 &&
+      ball.position.y <= pong1.position.y + pong1.vari.height
+    ) {
+      ball.velocity.x = -ball.velocity.x;
+      ball.velocity.y = 5;
     }
   }
 }
@@ -49,7 +96,7 @@ class sprite {
 const pong1 = new sprite({
   position: {
     x: 50,
-    y: 0,
+    y: 238,
   },
   velocity: {
     x: 0,
@@ -67,7 +114,7 @@ const pong1 = new sprite({
 const pong2 = new sprite({
   position: {
     x: 954,
-    y: 0,
+    y: 238,
   },
   velocity: {
     x: 0,
@@ -84,8 +131,8 @@ const pong2 = new sprite({
 //ball
 const ball = new sprite({
   position: {
-    x: 512,
-    y: 288,
+    x: 502,
+    y: 278,
   },
   velocity: {
     x: 5,
@@ -94,8 +141,6 @@ const ball = new sprite({
   vari: {
     width: 20,
     height: 20,
-    Xoffset: 10,
-    Yoffset: 10,
   },
 });
 
@@ -113,6 +158,11 @@ const pong2keys = {
     pressed: false,
   },
   ArrowUp: {
+    pressed: false,
+  },
+};
+const hotkeys = {
+  t: {
     pressed: false,
   },
 };
@@ -139,6 +189,20 @@ function animate() {
   } else if (pong2keys.ArrowUp.pressed == true && pong2lastkey == "ArrowUp") {
     pong2.velocity.y = -pong2.vari.speed;
   }
+  //simple ai
+  if (
+    hotkeys.t.pressed == true &&
+    ball.position.y > pong2.position.y + pong2.vari.height / 2
+  ) {
+    pong2keys.ArrowDown.pressed = true;
+    pong2lastkey = "ArrowDown";
+  } else if (
+    hotkeys.t.pressed == true &&
+    ball.position.y < pong2.position.y + pong2.vari.height / 2
+  ) {
+    pong2keys.ArrowUp.pressed = true;
+    pong2lastkey = "ArrowUp";
+  }
 }
 animate();
 //button
@@ -160,6 +224,12 @@ window.addEventListener("keydown", (event) => {
     case "ArrowUp":
       pong2keys.ArrowUp.pressed = true;
       pong2lastkey = "ArrowUp";
+      break;
+    case "t":
+      hotkeys.t.pressed = true;
+      break;
+    case "y":
+      hotkeys.t.pressed = false;
       break;
   }
 });
