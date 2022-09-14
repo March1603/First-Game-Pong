@@ -3,7 +3,8 @@ const c = canvas.getContext("2d");
 
 canvas.height = 576;
 canvas.width = 1024;
-
+pong1SCR = 0;
+pong2SCR = 0;
 c.fillRect(0, 0, canvas.width, canvas.height);
 class sprite {
   constructor({ position, vari, velocity }) {
@@ -43,13 +44,17 @@ class sprite {
     if (ball.position.x > 1014) {
       ball.position.x = 512;
       ball.position.y = 288;
-      ball.velocity.x = 5;
+      ball.velocity.x = -ball.velocity.x;
       ball.velocity.y = 0;
+      pong1SCR += 1;
+      document.getElementById("pong1SCR").innerHTML = pong1SCR;
     } else if (ball.position.x < 10) {
       ball.position.x = 512;
       ball.position.y = 288;
-      ball.velocity.x = -5;
+      ball.velocity.x = -ball.velocity.x;
       ball.velocity.y = 0;
+      pong2SCR += 1;
+      document.getElementById("pong2SCR").innerHTML = pong2SCR;
     }
     //map borders
     if (ball.position.y > canvas.height || ball.position.y < 0) {
@@ -135,7 +140,7 @@ const ball = new sprite({
     y: 278,
   },
   velocity: {
-    x: 5,
+    x: 7,
     y: 0,
   },
   vari: {
@@ -165,13 +170,38 @@ const hotkeys = {
   t: {
     pressed: false,
   },
+  g: {
+    pressed: false,
+  },
+  z: {
+    pressed: false,
+  },
+  x: {
+    pressed: false,
+  },
+  c: {
+    pressed: false,
+  },
+  v: {
+    pressed: false,
+  },
 };
 let pong1lastkey;
 let pong2lastkey;
 //cycles
 function animate() {
   window.requestAnimationFrame(animate);
-  c.fillStyle = "black";
+  if (hotkeys.z.pressed == true) {
+    c.fillStyle = "#660000";
+  } else if (hotkeys.x.pressed == true) {
+    c.fillStyle = "#000066";
+  } else if (hotkeys.c.pressed == true) {
+    c.fillStyle = "#006600";
+  } else if (hotkeys.v.pressed == true) {
+    c.fillStyle = "#660066";
+  } else {
+    c.fillStyle = "black";
+  }
   c.fillRect(0, 0, canvas.width, canvas.height);
   pong1.update();
   pong2.update();
@@ -189,7 +219,7 @@ function animate() {
   } else if (pong2keys.ArrowUp.pressed == true && pong2lastkey == "ArrowUp") {
     pong2.velocity.y = -pong2.vari.speed;
   }
-  //simple ai
+  //pong2 AI
   if (
     hotkeys.t.pressed == true &&
     ball.position.y > pong2.position.y + pong2.vari.height / 2
@@ -202,6 +232,20 @@ function animate() {
   ) {
     pong2keys.ArrowUp.pressed = true;
     pong2lastkey = "ArrowUp";
+  }
+  //pong1 AI
+  if (
+    hotkeys.g.pressed == true &&
+    ball.position.y > pong1.position.y + pong1.vari.height / 2
+  ) {
+    pong1keys.s.pressed = true;
+    pong1lastkey = "s";
+  } else if (
+    hotkeys.g.pressed == true &&
+    ball.position.y < pong1.position.y + pong1.vari.height / 2
+  ) {
+    pong1keys.w.pressed = true;
+    pong1lastkey = "w";
   }
 }
 animate();
@@ -232,6 +276,44 @@ window.addEventListener("keydown", (event) => {
       hotkeys.t.pressed = false;
       pong2keys.ArrowDown.pressed = false;
       pong2keys.ArrowUp.pressed = false;
+      break;
+    case "g":
+      hotkeys.g.pressed = true;
+      break;
+    case "h":
+      hotkeys.g.pressed = false;
+      pong1keys.s.pressed = false;
+      pong1keys.w.pressed = false;
+      break;
+    case "z":
+      hotkeys.z.pressed = true;
+      hotkeys.x.pressed = false;
+      hotkeys.c.pressed = false;
+      hotkeys.v.pressed = false;
+      break;
+    case "x":
+      hotkeys.x.pressed = true;
+      hotkeys.z.pressed = false;
+      hotkeys.c.pressed = false;
+      hotkeys.v.pressed = false;
+      break;
+    case "c":
+      hotkeys.c.pressed = true;
+      hotkeys.z.pressed = false;
+      hotkeys.x.pressed = false;
+      hotkeys.v.pressed = false;
+      break;
+    case "v":
+      hotkeys.v.pressed = true;
+      hotkeys.z.pressed = false;
+      hotkeys.x.pressed = false;
+      hotkeys.c.pressed = false;
+      break;
+    case "m":
+      hotkeys.z.pressed = false;
+      hotkeys.x.pressed = false;
+      hotkeys.c.pressed = false;
+      hotkeys.v.pressed = false;
       break;
   }
 });

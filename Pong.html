@@ -1,6 +1,61 @@
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    .counter {
+      justify-content: center;
+      height: 100px;
+      width: 100px;
+      color: white;
+      font-size: 300%;
+      margin: 225px;
+    }
+  </style>
+</head>
 <body style="background-color: rgb(71, 71, 71)">
-  <div>
+  <div style="position: relative; display: inline-block">
+    <div
+      style="
+        height: 50px;
+        background-color: White;
+        color: black;
+        font-size: 50px;
+        align-items: center;
+      "
+    >
+      <p>PONG ver 1-2</p>
+    </div>
+    <div
+      style="
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100px;
+        align-items: center;
+        padding: 50px;
+      "
+    >
+      <div class="counter">
+        <p id="pong1SCR"></p>
+      </div>
+      <div class="counter">
+        <p id="pong2SCR"></p>
+      </div>
+    </div>
     <canvas></canvas>
+  </div>
+  <div
+    style="
+      float: right;
+      width: 23%;
+      height: 626px;
+      background-color: white;
+      display: flex;
+      margin-top: 50px;
+    "
+  >
+    <p>p</p>
   </div>
   <script src="/pong.js"></script>
 </body>
