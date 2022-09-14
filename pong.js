@@ -13,13 +13,11 @@ class sprite {
     this.vari = vari;
   }
   draw() {
-    c.fillStyle = "gray";
+    c.fillStyle = "#ffffff44";
     c.fillRect(510, 0, 4, canvas.height);
-    c.fillStyle = "gray";
     c.fillRect(46, 0, 4, canvas.height);
-    c.fillStyle = "gray";
     c.fillRect(974, 0, 4, canvas.height);
-    c.fillStyle = "white";
+    c.fillStyle = "#ffffffdd";
     c.fillRect(
       this.position.x,
       this.position.y,
@@ -46,6 +44,8 @@ class sprite {
       ball.position.y = 288;
       ball.velocity.x = -ball.velocity.x;
       ball.velocity.y = 0;
+      pong1.position.y = 238;
+      pong2.position.y = 238;
       pong1SCR += 1;
       document.getElementById("pong1SCR").innerHTML = pong1SCR;
     } else if (ball.position.x < 10) {
@@ -53,6 +53,8 @@ class sprite {
       ball.position.y = 288;
       ball.velocity.x = -ball.velocity.x;
       ball.velocity.y = 0;
+      pong1.position.y = 238;
+      pong2.position.y = 238;
       pong2SCR += 1;
       document.getElementById("pong2SCR").innerHTML = pong2SCR;
     }
@@ -159,10 +161,10 @@ const pong1keys = {
   },
 };
 const pong2keys = {
-  ArrowDown: {
+  k: {
     pressed: false,
   },
-  ArrowUp: {
+  i: {
     pressed: false,
   },
 };
@@ -214,9 +216,9 @@ function animate() {
     pong1.velocity.y = -pong1.vari.speed;
   }
   pong2.velocity.y = 0;
-  if (pong2keys.ArrowDown.pressed == true && pong2lastkey == "ArrowDown") {
+  if (pong2keys.k.pressed == true && pong2lastkey == "k") {
     pong2.velocity.y = +pong2.vari.speed;
-  } else if (pong2keys.ArrowUp.pressed == true && pong2lastkey == "ArrowUp") {
+  } else if (pong2keys.i.pressed == true && pong2lastkey == "i") {
     pong2.velocity.y = -pong2.vari.speed;
   }
   //pong2 AI
@@ -224,14 +226,14 @@ function animate() {
     hotkeys.t.pressed == true &&
     ball.position.y > pong2.position.y + pong2.vari.height / 2
   ) {
-    pong2keys.ArrowDown.pressed = true;
-    pong2lastkey = "ArrowDown";
+    pong2keys.k.pressed = true;
+    pong2lastkey = "k";
   } else if (
     hotkeys.t.pressed == true &&
     ball.position.y < pong2.position.y + pong2.vari.height / 2
   ) {
-    pong2keys.ArrowUp.pressed = true;
-    pong2lastkey = "ArrowUp";
+    pong2keys.i.pressed = true;
+    pong2lastkey = "i";
   }
   //pong1 AI
   if (
@@ -261,21 +263,21 @@ window.addEventListener("keydown", (event) => {
       pong1keys.w.pressed = true;
       pong1lastkey = "w";
       break;
-    case "ArrowDown":
-      pong2keys.ArrowDown.pressed = true;
-      pong2lastkey = "ArrowDown";
+    case "k":
+      pong2keys.k.pressed = true;
+      pong2lastkey = "k";
       break;
-    case "ArrowUp":
-      pong2keys.ArrowUp.pressed = true;
-      pong2lastkey = "ArrowUp";
+    case "i":
+      pong2keys.i.pressed = true;
+      pong2lastkey = "i";
       break;
     case "t":
       hotkeys.t.pressed = true;
       break;
     case "y":
       hotkeys.t.pressed = false;
-      pong2keys.ArrowDown.pressed = false;
-      pong2keys.ArrowUp.pressed = false;
+      pong2keys.k.pressed = false;
+      pong2keys.i.pressed = false;
       break;
     case "g":
       hotkeys.g.pressed = true;
@@ -325,11 +327,11 @@ window.addEventListener("keyup", (event) => {
     case "w":
       pong1keys.w.pressed = false;
       break;
-    case "ArrowDown":
-      pong2keys.ArrowDown.pressed = false;
+    case "k":
+      pong2keys.k.pressed = false;
       break;
-    case "ArrowUp":
-      pong2keys.ArrowUp.pressed = false;
+    case "i":
+      pong2keys.i.pressed = false;
       break;
   }
 });
